@@ -39,10 +39,11 @@ app.use(errorHandler);
 // ─── Database Seed ───────────────────────────────────────────────────────────
 const seedDatabase = async () => {
   // Admin user
-  const existingAdmin = await User.findOne({ where: { email: process.env.ADMIN_EMAIL } });
+  const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
+  const existingAdmin = await User.findOne({ where: { email: adminEmail } });
   if (!existingAdmin) {
     const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 12);
-    await User.create({ email: process.env.ADMIN_EMAIL, password: hashedPassword });
+    await User.create({ email: adminEmail, password: hashedPassword });
     console.log('✅ Admin user created');
   }
 
